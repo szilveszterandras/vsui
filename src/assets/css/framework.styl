@@ -1,0 +1,31 @@
+.flex
+    display flex
+    & > *
+        flex 1
+
+    for x in row row-reverse column column-reverse
+        &.direction-{x}
+            flex-direction x
+
+    for x in nowrap wrap wrap-reverse
+        &.wrap-{x}
+            flex-wrap x
+
+    for x in flex-start flex-end center space-between space-around
+        &.justify-{x}
+            justify-content x
+
+    for x in flex-start flex-end center stretch baseline
+        &.align-items-{x}
+            align-items x
+
+    for x in flex-start flex-end center stretch space-between space-around
+        &.align-content-{x}
+            align-content x
+
+    & > .no-flex
+        flex none
+
+    for x in flex-start flex-end center stretch baseline
+        & > .align-self-{x}
+            align-self x
