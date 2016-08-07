@@ -1,6 +1,7 @@
 import io from "socket.io-client";
 import Rx from "rxjs";
 import _ from "lodash";
+import Immutable from "immutable";
 
 const STORAGE_KEY = "vsui_session_token";
 const STATE = {
@@ -30,7 +31,7 @@ class Session {
     request(topic, data, callback) {
         const requestId = _.uniqueId();
         this.requestStream.filter(r => r.requestId === requestId)
-            .map(r => JSON.parse(r.payload))
+            .map(r => Immutable.fromJS(JSON.parse(r.payload)))
             .take(1)
             .subscribe(callback);
 
@@ -40,7 +41,7 @@ class Session {
         const requestId = _.uniqueId();
         const stream = this.streamStream
             .filter(r => r.requestId === requestId)
-            .map(r => JSON.parse(r.payload));
+            .map(r => Immutable.fromJS(JSON.parse(r.payload)));
 
         this._send("stream", topic, requestId, data);
         return {
@@ -48,10 +49,10 @@ class Session {
             requestId
         };
     }
-    cancel(requestId) {
+    cancel(requestId, callback) {
         this.request("unsubscribe", {
             requestId
-        });
+        }, callback);
     }
     onLogin(token, user) {
         this.token = token;
@@ -103,11 +104,11 @@ class Session {
         this.request("validate", {
             token
         }, r => {
-            if (r.isValid) {
+            if (r.get("isValid")) {
                 this.token = token;
-                this.user = r.user;
+                this.user = r.get("user");
             }
-            this.state = r.isValid ? STATE.CONNECTED : STATE.INVALID;
+            this.state = r.get("isValid") ? STATE.CONNECTED : STATE.INVALID;
             this.stateCallback(this.state);
         });
     }

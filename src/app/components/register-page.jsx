@@ -66,7 +66,7 @@ export default class RegisterPage extends React.Component {
             avatar: hash
         };
         Session.request("user/new", payload, r => {
-            if (r.isSuccess) {
+            if (r.get("isSuccess")) {
                 this._login(this.refs.username.value,
                     this.refs.password.value);
             }
@@ -78,8 +78,8 @@ export default class RegisterPage extends React.Component {
             password
         }, r => {
             // TODO handle fail
-            if (r.token) {
-                Session.onLogin(r.token, r.user);
+            if (r.has("token")) {
+                Session.onLogin(r.get("token"), r.get("user"));
                 this.context.router.push({
                     pathname: "/dashboard"
                 });

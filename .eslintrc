@@ -38,7 +38,6 @@
     "no-lonely-if": 1,
     "no-mixed-spaces-and-tabs": [2, "smart-tabs"],
     "no-multi-spaces": 1,
-    "no-negated-condition": 1,
     "no-nested-ternary": 1,
     "no-param-reassign": 1,
     "no-shadow": 2,

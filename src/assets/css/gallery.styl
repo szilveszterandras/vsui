@@ -1,0 +1,26 @@
+.vertical-gallery
+    width 1040px
+    margin 0 auto
+    .photo-thumb
+        animation fadein 500ms
+        display inline-block
+        margin 5px
+        width 250px
+        cursor pointer
+        opacity 0.7
+        transition opacity 200ms
+
+        &:hover
+            opacity 1
+        img
+            width 250px
+        .title
+            padding 10px
+            padding-bottom 20px
+            background-color #000;
+            color #fff;
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 0.7; }
+}

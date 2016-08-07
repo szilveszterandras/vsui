@@ -30,8 +30,8 @@ export default class LoginPage extends React.Component {
             password: this.refs.password.value
         }, r => {
             // TODO handle fail
-            if (r.token) {
-                Session.onLogin(r.token, r.user);
+            if (r.has("token")) {
+                Session.onLogin(r.get("token"), r.get("user"));
                 this.context.router.push({
                     pathname: "/dashboard"
                 });

@@ -3,15 +3,18 @@ import React from "react";
 export default class HeaderPage extends React.Component {
     render() {
         return (<header className="header-page">
-            <div className="user flex">
-                <div className="no-flex">
-                    <img src={this.props.user.avatar} />
+            <div className="user flex align-items-center">
+                <div className="avatar no-flex">
+                    <img src={this.props.user.get("avatar")} />
                 </div>
-                <div>
-                    <div>{this.props.user.name}</div>
-                    <div>{this.props.user.username}</div>
+                <div className="person no-flex">
+                    <div className="name">{this.props.user.get("name")}</div>
+                    <div>{this.props.user.get("email")}</div>
+                    <div>@{this.props.user.get("username")}</div>
                 </div>
-                <div className="no-flex">>></div>
+                <div className="caret no-flex">
+                    <i className="fa fa-caret-down"/>
+                </div>
             </div>
         </header>);
     }

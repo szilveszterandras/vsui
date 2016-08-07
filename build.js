@@ -1,3 +1,4 @@
+/*eslint-disable */
 var path = require('path');
 var Webpack = require("webpack");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
@@ -27,6 +28,12 @@ var config = {
             }, {
                 test: /\.styl$/,
                 loader: ExtractTextPlugin.extract("css!stylus")
+            }, {
+                test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: "file-loader"
+            }, {
+                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: "url-loader?limit=10000&minetype=application/font-woff"
             }
         ]
     },

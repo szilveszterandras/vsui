@@ -1,6 +1,7 @@
 import React from "react";
 import Session from "utils/session";
 import HeaderPage from "components/header-page";
+
 export default class MainPage extends React.Component {
     static get contextTypes() {
         return {
@@ -16,7 +17,9 @@ export default class MainPage extends React.Component {
         this.initSession();
     }
     componentWillReceiveProps(props) {
-        this.authorize(props.location.pathname);
+        if (props.location.pathname !== this.props.location.pathname) {
+            this.authorize(props.location.pathname);
+        }
     }
     render() {
         const overlay = this.state.sessionState === Session.STATE.DISCONNECTED ?
@@ -26,8 +29,8 @@ export default class MainPage extends React.Component {
             (<HeaderPage user={Session.user} />) : undefined;
         return (<div className="main-page">
             {header}
-            {this.props.children}
-            {overlay}
+            {this.state.sessionState !== Session.STATE.DISCONNECTED ?
+                this.props.children : overlay}
         </div>);
     }
     initSession() {
@@ -46,7 +49,6 @@ export default class MainPage extends React.Component {
     }
     authorize(pathname) {
         if (this.state.sessionState === Session.STATE.INVALID &&
-            pathname !== this.props.location.pathname &&
             pathname !== "/login" &&
             pathname !== "/register") {
 

@@ -1,3 +1,20 @@
+@font-face {
+    font-family: "ProximaNova";
+    src: url("../fonts/ProximaNova-Light.woff") format('woff');
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: "ProximaNova";
+    src: url("../fonts/ProximaNova-Regular.woff") format('woff');
+}
+
+@font-face {
+    font-family: "ProximaNova";
+    src: url("../fonts/ProximaNova-Semibold.woff") format('woff');
+    font-weight: bold;
+}
+
 .flex
     display flex
     & > *
@@ -29,3 +46,14 @@
     for x in flex-start flex-end center stretch baseline
         & > .align-self-{x}
             align-self x
+
+.block
+    display block
+.inline
+    display inline
+.absolute
+    position absolute
+.relative
+    position relative
+.text-center
+    text-align center
