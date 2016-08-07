@@ -8,6 +8,7 @@ import MainPage from "components/main-page";
 import LoginPage from "components/login-page";
 import RegisterPage from "components/register-page";
 import DashboardPage from "components/dashboard-page";
+import UserRoot from "components/user-root";
 import PhotosPage from "components/photos-page";
 import PhotoPage from "components/photo-page";
 
@@ -21,8 +22,10 @@ ReactDOM.render((
             <Route name="login" path="login" component={LoginPage} />
             <Route name="register" path="register" component={RegisterPage} />
             <Route name="dashboard" path="dashboard" component={DashboardPage} />
-            <Route name="photos" path=":username/photos" component={PhotosPage} />
-            <Route name="photo" path=":username/photo/:photoHash" component={PhotoPage} />
+            <Route name="userRoot" path=":username" component={UserRoot} >
+                <Route name="photos" path="photos" component={PhotosPage} />
+                <Route name="photo" path="photo/:photoHash" component={PhotoPage} />
+            </Route>
         </Route>
     </Router>
 ), document.getElementById("root"));

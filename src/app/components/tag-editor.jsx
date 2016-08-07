@@ -1,16 +1,22 @@
 import React from "react";
 import Rx from "rxjs";
-import Immutable from "immutable";
+import TagService from "services/tag-service";
 
 export default class TagEditor extends React.Component {
     constructor() {
         super();
         this.state = {
-            selectedTags: Immutable.List(),
             prevValue: ""
         };
         this.regex = /^#[a-zA-Z][a-zA-Z\-]+[a-zA-Z]$/;
 
+    }
+    componentWillMount() {
+        this.tagService = new TagService({}, allTags => {
+            this.setState({
+                allTags
+            });
+        });
     }
     componentDidMount() {
         this.sub = Rx.Observable.fromEvent(this.refs.tagInput, "keyup")
@@ -19,21 +25,24 @@ export default class TagEditor extends React.Component {
     }
     render() {
         return <div className="tag-editor">
-            {this.state.selectedTags.map(t =>
+            {this.props.tags.map(t =>
                 <span className="tag">{t}</span>)}
             <input type="text" ref="tagInput" />
             {this.state.prevValue[0] === "#" ? this.renderSuggestions() : undefined}
         </div>;
     }
+    componentWillUnmount() {
+        this.tagService.destroy();
+    }
     renderSuggestions() {
         const value = this.state.prevValue.slice(1);
-        const matches = this.props.tags
+        const matches = this.state.allTags
             .filter((nr, tag) => tag.includes(value))
             .sort((a, b) => b.count - a.count)
             .take(5);
         return <div>{matches.map((nr, tag) =>
-                <span onClick={this.onSuggestionClick.bind(this, tag)}>{tag} x {nr}</span>)
-        }</div>;
+                <span onClick={this.onSuggestionClick.bind(this, tag)}>{tag} x {nr}</span>
+        )}</div>;
     }
     onSuggestionClick(tag) {
         this._addTag(tag);
@@ -52,16 +61,12 @@ export default class TagEditor extends React.Component {
         });
     }
     _deleteLast() {
-        const currentTag = this.state.selectedTags.last();
-        this.setState({
-            selectedTags: this.state.selectedTags.butLast()
-        });
+        const currentTag = this.props.tags.last();
         this.refs.tagInput.value = currentTag;
+        this.props.onChange(this.props.tags.butLast());
     }
     _addTag(value) {
-        this.setState({
-            selectedTags: this.state.selectedTags.push(value)
-        });
         this.refs.tagInput.value = "";
+        this.props.onChange(this.props.tags.push(value.replace("#", "")));
     }
 }

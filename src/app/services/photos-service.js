@@ -14,11 +14,15 @@ export default class PhotosService {
             logger.info(" > Photo stream complete");
         });
 
-        this.subscription = this.stream.scan((state, update) => {
-            const m = update.reduce((map, x) =>
-                map.set(x.get("id"), x), Immutable.Map());
-            return state.merge(m);
-        }, Immutable.Map()).subscribe(this.subject);
+        this.subscription = this.stream
+            .scan((state, update) => {
+                if (update.has("isDeleted")) {
+                    return state.delete(update.get("id"));
+                }
+                const m = update.reduce((map, x) =>
+                    map.set(x.get("id"), x), Immutable.Map());
+                return state.merge(m);
+            }, Immutable.Map()).subscribe(this.subject);
         this.stream.take(1).subscribe(onComplete);
     }
     destroy() {

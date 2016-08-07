@@ -2,7 +2,7 @@ import Immutable from "immutable";
 import React from "react";
 import Session from "utils/session";
 import PhotosService from "services/photos-service";
-import TagService from "services/tag-service";
+import StarService from "services/star-service";
 import Upload from "components/upload-component";
 import DashboardSection from "components/dashboard-section";
 
@@ -16,6 +16,7 @@ export default class DashboardPage extends React.Component {
         super();
         this.state = {
             photos: Immutable.Map(),
+            stars: Immutable.List(),
             waiting: true,
             isUploadOpen: false
         };
@@ -34,12 +35,15 @@ export default class DashboardPage extends React.Component {
         }, () => this.setState({
             waiting: false
         }));
-
-        this.tagService = new TagService({}, tags => {
+        this.starService = new StarService({
+            username: Session.user.get("username")
+        }, stars => {
             this.setState({
-                tags
+                stars
             });
-        });
+        }, () => this.setState({
+            waiting: false
+        }));
     }
     render() {
         return (<div className="dashboard">
@@ -57,6 +61,7 @@ export default class DashboardPage extends React.Component {
                 title="My Photos"
                 maxCount={8}
                 photos={this.state.photos.toList()}
+                stars={this.state.stars}
                 onMore={this.onMyPhotos}/>
         </div>);
     }
@@ -65,6 +70,7 @@ export default class DashboardPage extends React.Component {
             return;
         }
         this.photosService.destroy();
+        this.starService.destroy();
     }
     toggleUpload(isUploadOpen) {
         this.setState({

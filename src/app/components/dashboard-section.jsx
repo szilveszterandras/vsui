@@ -22,6 +22,7 @@ export default class DashboardSection extends React.Component {
             </h2>
             <VerticalGallery
                 photos={photos}
+                stars={this.props.stars}
                 columns={4}/>
             {this.props.photos.count() > (this.props.maxCount || Infinity) ?
                 (<button className="more" onClick={this.props.onMore}>

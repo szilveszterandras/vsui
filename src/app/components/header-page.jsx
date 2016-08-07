@@ -1,8 +1,10 @@
 import React from "react";
+import SearchComponent from "components/search-component";
 
 export default class HeaderPage extends React.Component {
     render() {
         return (<header className="header-page">
+            <SearchComponent />
             <div className="user flex align-items-center">
                 <div className="avatar no-flex">
                     <img src={this.props.user.get("avatar")} />

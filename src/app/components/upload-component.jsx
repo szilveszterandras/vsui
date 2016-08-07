@@ -1,17 +1,22 @@
+import Immutable from "immutable";
 import React from "react";
 import Dropzone from "react-dropzone";
 import Superagent from "superagent";
 import Session from "utils/session";
-import TagEditor from "components/tag-editor";
+import DetailsEditor from "components/details-editor";
 
 export default class UploadPage extends React.Component {
     constructor() {
         super();
         this.state = {
-            file: undefined
+            file: undefined,
+            title: "",
+            description: "",
+            tags: Immutable.List()
         };
         this.onDrop = this.onDrop.bind(this);
         this.onUploadClick = this.onUploadClick.bind(this);
+        this.onDetailsChange = this.onDetailsChange.bind(this);
     }
     render() {
         const zone = this.state.file ?
@@ -24,15 +29,11 @@ export default class UploadPage extends React.Component {
 
         return (<div className="upload-section">
             {zone}
-            <div className="form-section title">
-                <label htmlFor="title">Title:</label>
-                <input type="text" name="title" ref="title" />
-            </div>
-            <div className="form-section">
-                <label htmlFor="description">Description:</label>
-                <input type="text" name="description" ref="description" />
-            </div>
-            <TagEditor tags={this.props.tags} />
+            <DetailsEditor
+                title={this.state.title}
+                description={this.state.description}
+                tags={this.state.tags}
+                onChange={this.onDetailsChange}/>
             <button onClick={this.onUploadClick}>Upload</button>
             <button onClick={this.props.onClose}>Cancel</button>
         </div>);
@@ -40,6 +41,13 @@ export default class UploadPage extends React.Component {
     onDrop(files) {
         this.setState({
             file: files[0]
+        });
+    }
+    onDetailsChange(data) {
+        this.setState({
+            title: data.title,
+            description: data.description,
+            tags: data.tags
         });
     }
     onUploadClick() {
@@ -52,9 +60,10 @@ export default class UploadPage extends React.Component {
     }
     upload(hash) {
         Session.request("photo/new", {
-            title: this.refs.title.value,
-            description: this.refs.description.value,
-            tags: this.refs.tagEditor.getTags(),
+            title: this.state.title,
+            description: this.state.description,
+            //tags: this.refs.tagEditor.getTags(),
+            tags: this.state.tags,
             hash
         }, () => {
             // TODO handle error case

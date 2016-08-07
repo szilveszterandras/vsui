@@ -1,4 +1,5 @@
 import React from "react";
+import Session from "utils/session";
 import PhotoThumb from "components/photo-thumb";
 
 export default class VerticalGallery extends React.Component {
@@ -18,7 +19,10 @@ export default class VerticalGallery extends React.Component {
     renderColumn(column) {
         return (<div className="column">
             {column.map(photo =>
-                <PhotoThumb key={photo.get("id")} photo={photo} />)}
+                <PhotoThumb key={photo.get("id")} photo={photo}
+                    isStarrable={photo.get("username") !== Session.user.get("username")}
+                    isStarred={this.props.stars.includes(photo.get("hash"))}
+                />)}
         </div>);
     }
 }
