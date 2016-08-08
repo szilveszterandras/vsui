@@ -3,9 +3,9 @@ import Immutable from "immutable";
 import Session from "utils/session";
 
 export default class PhotosService {
-    constructor(data, onUpdate, onComplete) {
+    constructor(topic, data, onUpdate, onComplete) {
         console.log(" > Photo stream starting");
-        const d = Session.stream("photos/stream", data);
+        const d = Session.stream(topic, data);
         this.stream = d.stream;
         this.requestId = d.requestId;
 

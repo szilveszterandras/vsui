@@ -11,6 +11,7 @@ import DashboardPage from "components/dashboard-page";
 import UserRoot from "components/user-root";
 import PhotosPage from "components/photos-page";
 import PhotoPage from "components/photo-page";
+import PhotosByTagPage from "components/photos-by-tag-page";
 
 window.logger = Loglevel;
 window.logger.enableAll();
@@ -26,6 +27,7 @@ ReactDOM.render((
                 <Route name="photos" path="photos" component={PhotosPage} />
                 <Route name="photo" path="photo/:photoHash" component={PhotoPage} />
             </Route>
+            <Route name="byTags" path="search/:tag" component={PhotosByTagPage} />
         </Route>
     </Router>
 ), document.getElementById("root"));

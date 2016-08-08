@@ -9,23 +9,40 @@ const TYPES = {
     PHOTO: "photos"
 };
 
-const UserResult = ({result}) => (
-    <div className="search-user">{result.get("username")}</div>
+const UserResult = ({result, onClick}) => (
+    <div className="search-user flex" onClick={onClick}>
+        <div className="thumbnail no-flex">
+            <img src={result.get("avatar")} />
+        </div>
+        <div>
+            <h3>{result.get("username")}</h3>
+            <h5>{result.get("name")}</h5>
+        </div>
+    </div>
 );
-const TagResult = ({result}) => (
-    <div className="search-tag">{result.get("tag")}</div>
+const TagResult = ({result, onClick}) => (
+    <div className="search-tag" onClick={onClick}>
+        <h3>{result.get("tag")} ({result.get("count")})</h3>
+    </div>
 );
-const PhotoResult = ({result}) => (
-    <div className="search-photo">{result.get("title")}</div>
+const PhotoResult = ({result, onClick}) => (
+    <div className="search-photo flex" onClick={onClick}>
+        <div className="thumbnail no-flex">
+            <img src={result.get("path")} />
+        </div>
+        <div>
+            <h3>{result.get("title")}</h3>
+            <h5>{result.get("description")}</h5>
+        </div>
+    </div>
 );
-
-// const componentMap = {
-//     1: UserResults,
-//     2: TagResults,
-//     3: PhotoResults
-// };
 
 export default class SearchComponent extends React.Component {
+    static get contextTypes() {
+        return {
+            router: React.PropTypes.object.isRequired
+        };
+    }
     constructor() {
         super();
         this.state = {
@@ -56,11 +73,11 @@ export default class SearchComponent extends React.Component {
             const items = this.state.results.map(r => {
                 switch (this.state.type) {
                 case TYPES.USER:
-                    return <UserResult result={r} onClick={this.onItemClick} />;
+                    return <UserResult result={r} onClick={this.onItemClick.bind(this, r, TYPES.USER)} />;
                 case TYPES.TAG:
-                    return <TagResult result={r} onClick={this.onItemClick} />;
+                    return <TagResult result={r} onClick={this.onItemClick.bind(this, r, TYPES.TAG)} />;
                 case TYPES.PHOTO:
-                    return <PhotoResult result={r} onClick={this.onItemClick} />;
+                    return <PhotoResult result={r} onClick={this.onItemClick.bind(this, r, TYPES.PHOTO)} />;
                 }
             });
             results = (<div className="results">
@@ -109,7 +126,27 @@ export default class SearchComponent extends React.Component {
         }
 
     }
-    onItemClick() {
-        debugger;
+    onItemClick(data, type) {
+        switch (type) {
+        case TYPES.USER:
+            this.context.router.push({
+                pathname: "/" + data.get("username") + "/photos"
+            });
+            break;
+        case TYPES.TAG:
+            this.context.router.push({
+                pathname: "/search/" + data.get("tag")
+            });
+            break;
+        case TYPES.PHOTO:
+            this.context.router.push({
+                pathname: "/" + data.get("username") + "/photo/" + data.get("hash")
+            });
+            break;
+        }
+        this.service.reset();
+        this.setState({
+            results: Immutable.List()
+        });
     }
 }

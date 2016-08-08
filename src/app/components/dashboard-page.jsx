@@ -26,7 +26,7 @@ export default class DashboardPage extends React.Component {
         if (!Session.user) {
             return;
         }
-        this.photosService = new PhotosService({
+        this.photosService = new PhotosService("photos/stream", {
             username: Session.user.get("username")
         }, photos => {
             this.setState({
