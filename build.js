@@ -43,7 +43,8 @@ var config = {
             template: "src/assets/index.src",
             filename: "index.html",
             inject: true
-        })
+        }),
+        new Webpack.optimize.UglifyJsPlugin()
     ]
 };
 
