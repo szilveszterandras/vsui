@@ -84,7 +84,7 @@ export default class SearchComponent extends React.Component {
                 {items}
             </div>);
         }
-        return <div className="search-bar">
+        return <div className="search-bar relative">
             <i className="fa fa-search" />
             <input type="text" ref="input" />
             {results}
