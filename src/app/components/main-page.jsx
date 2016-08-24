@@ -35,7 +35,7 @@ export default class MainPage extends React.Component {
     }
     initSession() {
         Session.start({
-            host: "localhost",
+            host: "130.211.52.109",
             port: 9092,
             onStateChange: this.onStateChange.bind(this)
         });

@@ -22,7 +22,7 @@ class Session {
         this.state = STATE.DISCONNECTED;
         this.stateCallback = options.onStateChange;
 
-        this.socket = io.connect("http://" + options.host + ":" + options.port);
+        this.socket = io.connect("http://" + window.location.hostname + ":9092");
         this.socket.on("connect", this._onConnect);
         this.socket.on("disconnect", this._onDisconnect);
 
