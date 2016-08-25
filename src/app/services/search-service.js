@@ -32,7 +32,9 @@ export default class SearchService {
     }
     destroy() {
         this.reset(() => {
-            this.subject.dispose();
+            if (this.subject) {
+                this.subject.unsubscribe();
+            }
         });
     }
 }

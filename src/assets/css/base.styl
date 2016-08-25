@@ -2,10 +2,14 @@ body
     font-family ProximaNova
     color $text-gray
     background-color #fff
-    margin 0
+    padding-top 100px
+
+.main-page
+    width 1040px
+    margin 0 auto
 
 button
-    margin 5px
+    margin 0.5em
     box-sizing border-box
     cursor pointer
     font bold 12pt ProximaNova, sans-serif
@@ -20,10 +24,71 @@ button
     &.large
         font-size 15pt
 
-    &:hover
+    &:hover, &.dark:hover
         background-color $light-blue
         color #fff
 
-.main-page
-    width 1040px
+    &.dark
+        color #fff
+        background-color #000
+
+input[type="text"], input[type="password"]
+    box-sizing border-box
+    padding 0.3em 0.5em
+    border 1px solid #bbb
+    border-bottom 2px solid #bbb
+    border-radius 1px
+    outline none
+    &:hover, &:focus
+        border 1px solid $light-blue
+        border-bottom 2px solid $light-blue
+
+.form-default
+    width 400px
+    padding 40px
     margin 0 auto
+    &.dark
+        background-color #000
+        label
+            color #ddd
+        input
+            background-color #fff
+            border none
+            border-radius 3px
+
+    input
+        font-size 14pt
+        margin 0.3em 0
+    label
+        text-align right
+        padding-right 0.5em
+        width 100px
+    label, button
+        font-size 13pt
+        flex none
+
+.dropzone
+    display flex
+    flex-direction column
+    justify-content center
+    box-sizing border-box
+    font-size 20pt
+    width 6em
+    height 6em
+    border 3px dashed #ccc
+    border-radius 50%
+    color #ccc
+    margin 0 auto
+    cursor pointer
+    text-align center
+    transition color 400ms, border-color 400ms
+    i
+        transition font-size ease-in 150ms
+    &:hover
+        color $light-blue
+        border-color $light-blue
+        i
+            font-size 25pt
+
+.preview
+    animation slidefadein 500ms

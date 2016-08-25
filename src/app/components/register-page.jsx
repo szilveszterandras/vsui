@@ -2,6 +2,7 @@ import React from "react";
 import Dropzone from "react-dropzone";
 import Superagent from "superagent";
 import Session from "utils/session";
+import Globals from "utils/globals";
 
 export default class RegisterPage extends React.Component {
     static get contextTypes() {
@@ -18,25 +19,36 @@ export default class RegisterPage extends React.Component {
         this.onRegisterClick = this.onRegisterClick.bind(this);
     }
     render() {
-        return <div>
-            Register page
+        const zone = this.state.file ?
+            (<div className="preview avatar">
+                <img src={this.state.file.preview} />
+            </div>) :
+            (<Dropzone className="dropzone" onDrop={this.onDrop}>
+                <i className="fa fa-picture-o" />
+            </Dropzone>);
 
-            <Dropzone onDrop={this.onDrop}>
-                <div>Try dropping some files here, or click to select files to upload.</div>
-            </Dropzone>
-
-            <label htmlFor="username">Username:</label>
-            <input type="text" name="username" ref="username" />
-            <br/>
-            <label htmlFor="name">Name:</label>
-            <textarea name="name" ref="name" />
-            <br/>
-            <label htmlFor="email">Email:</label>
-            <textarea name="email" ref="email" />
-            <br/>
-            <label htmlFor="password">Password:</label>
-            <input type="password" name="password" ref="password" />
-            <button onClick={this.onRegisterClick}>Upload</button>
+        return <div className="form-default register dark">
+            {zone}
+            <h5>Avartar</h5>
+            <div className="flex align-items-center">
+                <label htmlFor="username">Username:</label>
+                <input type="text" name="username" ref="username" />
+            </div>
+            <div className="flex align-items-center">
+                <label htmlFor="name">Name:</label>
+                <input type="text" name="name" ref="name" />
+            </div>
+            <div className="flex align-items-center">
+                <label htmlFor="email">Email:</label>
+                <input type="text" name="email" ref="email" />
+            </div>
+            <div className="flex align-items-center">
+                <label htmlFor="password">Password:</label>
+                <input type="password" name="password" ref="password" />
+            </div>
+            <div className="flex justify-center">
+                <button className="dark" onClick={this.onRegisterClick}>Register</button>
+            </div>
         </div>;
     }
     onDrop(files) {
@@ -50,7 +62,7 @@ export default class RegisterPage extends React.Component {
         });
     }
     _uploadFile(file, callback) {
-        const req = Superagent.post("http://localhost:9093/upload");
+        const req = Superagent.post("http://" + Globals.serverIp + ":" + Globals.imagePort + "/upload");
         req.attach(file.name, file);
         // TODO handle unhappy case
         req.end((err, resp) => {

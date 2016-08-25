@@ -12,16 +12,21 @@ export default class LoginPage extends React.Component {
         this.onLoginClick = this.onLoginClick.bind(this);
     }
     render() {
-        return (<div>
-            <label htmlFor="username">Username:</label>
-            <input type="text" name="username" ref="username" />
-            <br/>
-            <label htmlFor="password">Password:</label>
-            <input type="password" name="password" ref="password" />
-            <button onClick={this.onLoginClick}>Log in</button>
-            <button onClick={() => this.context.router.push({
-                pathname: "/register"
-            })}>Register</button>
+        return (<div className="form-default login dark">
+            <div className="flex align-items-center">
+                <label htmlFor="username">Username:</label>
+                <input type="text" name="username" ref="username" />
+            </div>
+            <div className="flex align-items-center">
+                <label htmlFor="password">Password:</label>
+                <input type="password" name="password" ref="password" />
+            </div>
+            <div className="flex justify-center">
+                <button className="dark" onClick={this.onLoginClick}>Log in</button>
+                <button className="dark" onClick={() => this.context.router.push({
+                    pathname: "/register"
+                })}>Register</button>
+            </div>
         </div>);
     }
     onLoginClick() {

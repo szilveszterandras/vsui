@@ -3,8 +3,8 @@ import TagEditor from "components/tag-editor";
 
 export default class DetailsEditor extends React.Component {
     render() {
-        return (<div>
-            <div className="form-section title">
+        return (<div className="form-default dark">
+            <div className="flex align-items-center">
                 <label htmlFor="title">Title:</label>
                 <input type="text" name="title"
                     value={this.props.title} onChange={e => {
@@ -13,7 +13,7 @@ export default class DetailsEditor extends React.Component {
                         });
                     }} />
             </div>
-            <div className="form-section">
+            <div className="flex align-items-center">
                 <label htmlFor="description">Description:</label>
                 <input type="text" name="description"
                     value={this.props.description} onChange={e => {
@@ -22,11 +22,14 @@ export default class DetailsEditor extends React.Component {
                         });
                     }} />
             </div>
-            <TagEditor ref="tags" tags={this.props.tags} onChange={tags => {
-                this.onChange({
-                    tags
-                });
-            }} />
+            <div className="flex">
+                <label className="tag-label">Tags:</label>
+                <TagEditor ref="tags" tags={this.props.tags} onChange={tags => {
+                    this.onChange({
+                        tags
+                    });
+                }} />
+            </div>
         </div>);
     }
     onChange(data) {

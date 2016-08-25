@@ -1,15 +1,49 @@
 .search-bar
+    width 500px
+    .search-input
+        font-size 14pt
+        background-color #fff
+        border-radius 3px
+        padding 0 0.6em
+        input
+            font-size 13pt
+            background none
+            border none
+
     .thumbnail
         width 100px
-        height 100px
         img
             max-width 100px
             max-height 100px
 
     .results
+        background #000
         position absolute
+        width 100%
+        box-sizing border-box
         left 0
         top 50px
-        background white
-        padding 20px
+        padding 10px 20px
         z-index 2
+
+        &.tags
+            text-align center
+
+        .search-user, .search-tag, .search-photo
+            margin-bottom 10px
+            color #fff
+            opacity 0.6
+            cursor pointer
+            transition opacity 200ms
+            h3, h5
+                margin 5px 20px
+            h5
+                color #ccc
+            .thumbnail
+                text-align center
+            .text
+                max-height 100px
+                overflow hidden
+
+            &:hover
+                opacity 1

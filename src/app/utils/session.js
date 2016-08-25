@@ -9,11 +9,14 @@ const STATE = {
     DISCONNECTED: 1,
     CONNECTED: 2
 };
+const MESSAGE = {
+    DISCONNECTED: 0
+};
 
 class Session {
     constructor() {
-        console.log("Creating new session");
         this.STATE = STATE;
+        this.MESSAGE = MESSAGE;
 
         this._onConnect = this._onConnect.bind(this);
         this._onDisconnect = this._onDisconnect.bind(this);
@@ -22,7 +25,8 @@ class Session {
         this.state = STATE.DISCONNECTED;
         this.stateCallback = options.onStateChange;
 
-        this.socket = io.connect("http://" + window.location.hostname + ":9092");
+        logger.info("Trying to connect to: http://" + options.host + ":" + options.port);
+        this.socket = io.connect("http://" + options.host + ":" + options.port);
         this.socket.on("connect", this._onConnect);
         this.socket.on("disconnect", this._onDisconnect);
 
@@ -66,6 +70,7 @@ class Session {
         this.stateCallback(this.state);
     }
     _onConnect() {
+        logger.info("Socket connected");
         const token = localStorage.getItem(STORAGE_KEY);
         if (token) {
             this._validateToken(token);
@@ -75,8 +80,9 @@ class Session {
         }
     }
     _onDisconnect() {
+        logger.info("Socket disconnected");
         this.state = STATE.DISCONNECTED;
-        this.stateCallback(this.state);
+        this.stateCallback(this.state, MESSAGE.DISCONNECTED);
     }
     _setupStreams() {
         this.requestStream = Rx.Observable.fromEvent(this.socket, "request");

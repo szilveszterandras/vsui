@@ -28,7 +28,7 @@ export default class PhotosService {
     destroy() {
         Session.cancel(this.requestId, () => {
             this.subscription.unsubscribe();
-            this.subject.dispose();
+            this.subject.unsubscribe();
         });
     }
 }

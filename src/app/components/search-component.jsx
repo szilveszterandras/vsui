@@ -10,27 +10,27 @@ const TYPES = {
 };
 
 const UserResult = ({result, onClick}) => (
-    <div className="search-user flex" onClick={onClick}>
+    <div className="search-user flex align-items-center" onClick={onClick}>
         <div className="thumbnail no-flex">
             <img src={result.get("avatar")} />
         </div>
         <div>
-            <h3>{result.get("username")}</h3>
+            <h3>@{result.get("username")}</h3>
             <h5>{result.get("name")}</h5>
         </div>
     </div>
 );
 const TagResult = ({result, onClick}) => (
-    <div className="search-tag" onClick={onClick}>
-        <h3>{result.get("tag")} ({result.get("count")})</h3>
+    <div className="search-tag inline-block" onClick={onClick}>
+        <h3>#{result.get("tag")} ({result.get("count")})</h3>
     </div>
 );
 const PhotoResult = ({result, onClick}) => (
-    <div className="search-photo flex" onClick={onClick}>
+    <div className="search-photo flex align-items-center" onClick={onClick}>
         <div className="thumbnail no-flex">
             <img src={result.get("path")} />
         </div>
-        <div>
+        <div className="text">
             <h3>{result.get("title")}</h3>
             <h5>{result.get("description")}</h5>
         </div>
@@ -80,13 +80,15 @@ export default class SearchComponent extends React.Component {
                     return <PhotoResult result={r} onClick={this.onItemClick.bind(this, r, TYPES.PHOTO)} />;
                 }
             });
-            results = (<div className="results">
+            results = (<div className={(this.state.type === TYPES.TAG ? "tags " : "") + "results"}>
                 {items}
             </div>);
         }
         return <div className="search-bar relative">
-            <i className="fa fa-search" />
-            <input type="text" ref="input" />
+            <div className="search-input flex align-items-center">
+                <i className="fa fa-search no-flex" />
+                <input type="text" ref="input" />
+            </div>
             {results}
         </div>;
     }
@@ -121,7 +123,8 @@ export default class SearchComponent extends React.Component {
         } else {
             this.service.reset();
             this.setState({
-                results: Immutable.List()
+                results: Immutable.List(),
+                type: undefined
             });
         }
 
@@ -146,7 +149,8 @@ export default class SearchComponent extends React.Component {
         }
         this.service.reset();
         this.setState({
-            results: Immutable.List()
+            results: Immutable.List(),
+            type: undefined
         });
     }
 }

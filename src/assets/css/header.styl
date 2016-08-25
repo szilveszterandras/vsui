@@ -1,21 +1,25 @@
 header.header-page
-    margin 10px 0 30px 0
+    padding 10px 20px
+    background-color #000
     height 70px
+    position absolute
+    top 0
+    left 0
+    right 0
 
     .user
         font-size 9pt
         line-height 1.2em
-        opacity 0.7
-        width 300px
+        opacity 0.6
         float right
-        color $text-lightgray
+        color #ccc
         transition opacity 200ms
+        .name
+            color #fff
 
-        &:hover
+        &:hover, &.open
             opacity 1
             cursor pointer
-            .name
-                color $text-gray
             .caret
                 opacity 1
 
@@ -24,6 +28,7 @@ header.header-page
             img
                 width 60px
                 height 60px
+                object-fit cover
                 border-radius 50%
         .caret
             margin-left 10px
@@ -31,13 +36,20 @@ header.header-page
             transition opacity 200ms
         .name
             padding 5px 0
-            color $text-lightgray
             font-size 12pt
             font-weight bold
 
-    .logout
-        font-size 16pt
+    .user-menu
+        position absolute
+        padding 10px
+        background-color #000
+        font-size 14pt
         left 0
         right 0
-        text-align center
-        top 80px
+        top 70px
+
+        div
+            padding 10px 0
+            color #ccc
+            &:hover
+                color #fff

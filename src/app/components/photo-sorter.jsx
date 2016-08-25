@@ -27,6 +27,10 @@ export default class PhotoSorter extends React.Component {
             isOpen: false
         };
         this.onItemClick = this.onItemClick.bind(this);
+        this.onDocumentClick = this.onDocumentClick.bind(this);
+    }
+    componentWillUnmount() {
+        document.removeEventListener("click", this.onDocumentClick, false);
     }
     render() {
         let list = [(<div onClick={this.onItemClick.bind(this, this.props.value)}>
@@ -41,21 +45,27 @@ export default class PhotoSorter extends React.Component {
             });
         }
         return (<div className={"sorter relative" + (this.state.isOpen ? " open" : "")}>
-            {this.state.isOpen ? undefined : <i className="fa fa-caret-down" />}
-            <div className="absolute">
+            <div className="list absolute">
                 {list}
             </div>
         </div>);
     }
     onItemClick(value) {
-        this.setState({
-            isOpen: !this.state.isOpen
-        });
         if (!this.state.isOpen) {
+            document.addEventListener("click", this.onDocumentClick, false);
+            this.setState({
+                isOpen: true
+            });
             return;
         }
         if (value !== this.props.value) {
             this.props.onChange(value);
         }
+    }
+    onDocumentClick() {
+        document.removeEventListener("click", this.onDocumentClick, false);
+        this.setState({
+            isOpen: false
+        });
     }
 }

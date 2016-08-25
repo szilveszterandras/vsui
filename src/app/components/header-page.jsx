@@ -11,16 +11,26 @@ export default class HeaderPage extends React.Component {
         };
         this.onClick = this.onClick.bind(this);
         this.onLogout = this.onLogout.bind(this);
+        this.onDocumentClick = this.onDocumentClick.bind(this);
+    }
+    componentWillUnmount() {
+        document.removeEventListener("click", this.onDocumentClick, false);
     }
     render() {
-        return (<header className="header-page">
-            <SearchComponent />
-            <div className="user flex align-items-center relative"
+        let userClass = "user flex no-flex align-items-center relative";
+        if (this.state.isMenuOpen) {
+            userClass += " open";
+        }
+        return (<header className="header-page flex align-items-center">
+            <div>
+                <SearchComponent />
+            </div>
+            <div className={userClass}
                 onClick={this.onClick} >
                 <div className="avatar no-flex">
                     <img src={this.props.user.get("avatar")} />
                 </div>
-                <div className="person no-flex">
+                <div className="person">
                     <div className="name">{this.props.user.get("name")}</div>
                     <div>{this.props.user.get("email")}</div>
                     <div>@{this.props.user.get("username")}</div>
@@ -29,8 +39,9 @@ export default class HeaderPage extends React.Component {
                     <i className="fa fa-caret-down"/>
                 </div>
                 {this.state.isMenuOpen ?
-                    <div className="logout absolute"
-                        onClick={this.onLogout}>Logout</div> :
+                    <div className="user-menu">
+                        <div onClick={this.onLogout}>Logout</div>
+                    </div> :
                     undefined}
             </div>
         </header>);
@@ -38,6 +49,13 @@ export default class HeaderPage extends React.Component {
     onClick() {
         this.setState({
             isMenuOpen: true
+        });
+        document.addEventListener("click", this.onDocumentClick, false);
+    }
+    onDocumentClick() {
+        document.removeEventListener("click", this.onDocumentClick, false);
+        this.setState({
+            isMenuOpen: false
         });
     }
     onLogout() {

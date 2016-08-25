@@ -6,91 +6,57 @@
         margin 0 auto
 
         .dropzone
-            font-size 3em
-            border 3px dashed #ccc
-            border-radius 50%
-            color #ccc
-            width 300px
-            height 300px
-            margin 0 auto
-            cursor pointer
-            transition font-size ease-in 150ms, color 400ms, border-color 400ms
-
-            i
-                line-height 300px
-            &:hover
-                font-size 4em
-                color $light-blue
-                border-color $light-blue
+            font-size 50pt
+            margin 20px auto
+            &:hover i
+                font-size 60pt
 
         .preview
-            animation slidefadein 500ms
             img
                 width 100%
 
-        .form-section
-            margin-bottom 10px
-            label, input
-                display inline-block
-
-            label
-                font-size 12pt
-                line-height 2em
-                padding-right 10px
-                text-align right
-                width 100px
-                color #aaa
-
-            input
-                width 500px
-                border 0
-                border-bottom 1px solid #aaa
-                background none
-                color #555
-                padding 5px
-                outline none
-
-            &.title
-                margin-top 20px
-                input
-                    color #000
-                    font-size 16pt
-                    font-weight bold
-
+        .form-default
+            margin-top 20px
+            width 600px
+            padding 20px
 
         button
             margin-top 20px
-    .sorter
-        float right
-        font normal 11pt ProximaNova, sans-serif
-        cursor pointer
-        color #aaa
-        text-align right
-        height 1.3em
-        line-height 1.3em
-        width 150px
-        margin 4px 0
-
-        div.absolute
-            top 0
-            right 0
-            padding 0 14px
-            z-index 1
-        .fa-caret-down
-            opacity 0
-            transition opacity 200ms
-        &:not(.open):hover
-            color #666
-            .fa-caret-down
-                opacity 1
-        &.open .absolute
-            background-color #fff
-            & > div:hover
-                color #666
 
     .dashboard-section
         .more
             float right
+
+.sorter
+    float right
+    font normal 11pt ProximaNova, sans-serif
+    cursor pointer
+    color #888
+    text-align right
+    height 29px
+    width 150px
+    margin 4px 0
+
+    .list
+        top 0
+        right 0
+        padding 0 14px
+        z-index 1
+        box-sizing border-box
+        width 150px
+        transition background-color 200ms, color 200ms
+        div
+            margin 7px 0
+
+    &:not(.open):hover .list
+        color #fff
+        background-color #000
+
+    &.open .list
+        background-color #000
+        color #ccc
+        & > div:hover
+            color #fff
 
 @keyframes fadein {
     from { opacity: 0; }

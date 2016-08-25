@@ -1,4 +1,5 @@
 import React from "react";
+import Globals from "utils/globals";
 import Session from "utils/session";
 import HeaderPage from "components/header-page";
 
@@ -12,49 +13,42 @@ export default class MainPage extends React.Component {
         super();
         this.state = {
             sessionState: Session.STATE.DISCONNECTED,
-            message: undefined
+            message: "Connecting to server..."
         };
-        this.initSession();
-    }
-    componentWillReceiveProps(props) {
-        if (props.location.pathname !== this.props.location.pathname) {
-            this.authorize(props.location.pathname);
-        }
+
+        Session.start({
+            host: Globals.serverIp,
+            port: Globals.websocketPort,
+            onStateChange: this.onStateChange.bind(this)
+        });
     }
     render() {
         const overlay = this.state.sessionState === Session.STATE.DISCONNECTED ?
-            (<div className="session-overlay">Session Disconnected</div>) :
+            (<div className="session-overlay">
+                <div className="spinner" />
+                <div>{this.state.message}</div>
+            </div>) :
             undefined;
         const header = this.state.sessionState === Session.STATE.CONNECTED ?
-            (<HeaderPage user={Session.user} />) : undefined;
+            (<HeaderPage user={Session.user} />) :
+            undefined;
         return (<div className="main-page">
             {header}
             {this.state.sessionState !== Session.STATE.DISCONNECTED ?
                 this.props.children : overlay}
         </div>);
     }
-    initSession() {
-        Session.start({
-            host: "130.211.52.109",
-            port: 9092,
-            onStateChange: this.onStateChange.bind(this)
-        });
-    }
-    onStateChange(sessionState, message) {
-        this.setState({
-            sessionState,
-            message
-        });
-        this.authorize(this.props.location.pathname);
-    }
-    authorize(pathname) {
-        if (this.state.sessionState === Session.STATE.INVALID &&
-            pathname !== "/login" &&
-            pathname !== "/register") {
-
+    onStateChange(sessionState, code) {
+        if (sessionState === Session.STATE.INVALID) {
             this.context.router.push({
                 pathname: "/login"
             });
         }
+        const message = code === Session.MESSAGE.DISCONNECTED ?
+            "Lost connection to server, trying to reconnect..." : undefined;
+        this.setState({
+            sessionState,
+            message
+        });
     }
 }

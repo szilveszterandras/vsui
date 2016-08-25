@@ -27,8 +27,10 @@ export default class PhotoThumb extends React.Component {
         };
         return (<div className="photo-thumb" style={style}
             onClick={this.onClick}>
-            <img src={this.props.photo.get("path")}
-                onLoad={this.onLoad} />
+            <div className="image">
+                <img src={this.props.photo.get("path")}
+                    onLoad={this.onLoad} />
+            </div>
             {starIcon}
             <div className="title">{this.props.photo.get("title")}</div>
         </div>);

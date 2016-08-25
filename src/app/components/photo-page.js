@@ -31,22 +31,30 @@ export default class PhotoPage extends React.Component {
         if (!this.state.photo) {
             return <div>LOADING...</div>;
         }
-        const edit = this.state.isEditOpen ?
-            <EditComponent photo={this.state.photo} onClose={() => {
-                this.setState({
-                    isEditOpen: false
-                });
-            }}/> :
-            undefined;
-        const content = this.state.isMine && !this.state.isEditOpen ?
-            <div className="actions">
-                <button onClick={this.onEditClick}>Edit</button>
-                <button onClick={this.onDeleteClick}>Delete</button>
-            </div> : <div> OTHER's PHOTO</div>;
+        let content;
+        let details;
+        if (this.state.isMine) {
+            content = this.state.isEditOpen ?
+                <EditComponent photo={this.state.photo} onClose={() => {
+                    this.setState({
+                        isEditOpen: false
+                    });
+                }}/> :
+                <div className="actions">
+                    <button onClick={this.onEditClick}>Edit</button>
+                    <button onClick={this.onDeleteClick}>Delete</button>
+                </div>;
+        } else {
+            details = <div className="details">
+                <h3>{this.state.photo.get("title")}</h3>
+                <h5>{this.state.photo.get("description")}</h5>
+                <div>{this.state.photo.get("tags").map(t => <span>#{t}</span>)}</div>
+            </div>;
+        }
 
         return <div className="photo-details">
+            {details}
             <img src={this.state.photo.get("path")} />
-            {edit}
             {content}
         </div>;
     }

@@ -3,6 +3,7 @@ import React from "react";
 import Dropzone from "react-dropzone";
 import Superagent from "superagent";
 import Session from "utils/session";
+import Globals from "utils/globals";
 import DetailsEditor from "components/details-editor";
 
 export default class UploadPage extends React.Component {
@@ -51,7 +52,7 @@ export default class UploadPage extends React.Component {
         });
     }
     onUploadClick() {
-        const req = Superagent.post("http://localhost:9093/upload");
+        const req = Superagent.post("http://" + Globals.serverIp + ":" + Globals.imagePort + "/upload");
         req.attach(this.state.file.name, this.state.file);
         // TODO handle unhappy case
         req.end((err, resp) => {

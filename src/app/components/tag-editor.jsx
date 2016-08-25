@@ -26,7 +26,7 @@ export default class TagEditor extends React.Component {
     render() {
         return <div className="tag-editor">
             {this.props.tags.map(t =>
-                <span className="tag">{t}</span>)}
+                <span className="tag">#{t}</span>)}
             <input type="text" ref="tagInput" />
             {this.state.prevValue[0] === "#" ? this.renderSuggestions() : undefined}
         </div>;
@@ -37,11 +37,14 @@ export default class TagEditor extends React.Component {
     renderSuggestions() {
         const value = this.state.prevValue.slice(1);
         const matches = this.state.allTags
-            .filter((nr, tag) => tag.includes(value))
-            .sort((a, b) => b.count - a.count)
+            .filter((nr, tag) => tag.includes(value) &&
+                !this.props.tags.includes(tag))
+            .sort((a, b) => {
+                return b - a;
+            })
             .take(5);
-        return <div>{matches.map((nr, tag) =>
-                <span onClick={this.onSuggestionClick.bind(this, tag)}>{tag} x {nr}</span>
+        return <div className="suggestions">{matches.map((nr, tag) =>
+                <span onClick={this.onSuggestionClick.bind(this, tag)}>{tag}({nr})</span>
         )}</div>;
     }
     onSuggestionClick(tag) {
@@ -62,11 +65,16 @@ export default class TagEditor extends React.Component {
     }
     _deleteLast() {
         const currentTag = this.props.tags.last();
-        this.refs.tagInput.value = currentTag;
-        this.props.onChange(this.props.tags.butLast());
+        if (currentTag) {
+            this.refs.tagInput.value = "#" + currentTag;
+            this.props.onChange(this.props.tags.butLast());
+        }
     }
     _addTag(value) {
         this.refs.tagInput.value = "";
+        this.setState({
+            prevValue: ""
+        });
         this.props.onChange(this.props.tags.push(value.replace("#", "")));
     }
 }
