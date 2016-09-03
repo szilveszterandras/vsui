@@ -1,17 +1,35 @@
 .photo-details
-    text-align center
-    & > img
-        max-width 100%
+    margin-top 30px
+    .photo
+        position relative
+        img
+            width 100%
+            object-fit cover
+        .actions
+            position absolute
+            bottom 0
+            left 0
+            right 0
+            height 70px
+            background linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 100%)
+            text-align right
+            box-sizing border-box
+            opacity 0
+            transition opacity 200ms
+            i
+                color #fff
+                font-size 20px
+                margin 40px 10px 0 10px
+                cursor pointer
+        &:hover .actions
+            opacity 1
 
+    .edit-section
+        text-align center
     .form-default
-        margin-top 20px
-        width 600px
+        box-sizing border-box
+        width 100%
         padding 20px
-
-    .details
-        max-width 60%
-        margin 0 auto
-        color #555
 
 .tag-label
     line-height 2em
@@ -35,3 +53,27 @@
         border-bottom 1px solid #fff
     .suggestions
         position absolute
+
+.image-panel
+    width 350px
+    padding 20px
+    h2, h5
+        margin 0 0 5px 0
+    .description
+        border-left 3px solid #aaa
+        padding-left 10px
+    .rating
+        font-size 24pt
+        font-weight bold
+        color $tint-blue
+        span
+            font-size 11pt
+            font-weight normal
+            color #aaa
+    .tags
+        color $light-blue
+        span
+            cursor pointer
+            margin 0 5px
+    .actions
+        margin-top 20px

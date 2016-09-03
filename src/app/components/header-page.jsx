@@ -1,9 +1,15 @@
 import React from "react";
 import SearchComponent from "components/search-component";
+import Avatar from "components/avatar";
 
 const STORAGE_KEY = "vsui_session_token";
 
 export default class HeaderPage extends React.Component {
+    static get contextTypes() {
+        return {
+            router: React.PropTypes.object.isRequired
+        };
+    }
     constructor() {
         super();
         this.state = {
@@ -11,6 +17,7 @@ export default class HeaderPage extends React.Component {
         };
         this.onClick = this.onClick.bind(this);
         this.onLogout = this.onLogout.bind(this);
+        this.onDashboardClick = this.onDashboardClick.bind(this);
         this.onDocumentClick = this.onDocumentClick.bind(this);
     }
     componentWillUnmount() {
@@ -27,19 +34,13 @@ export default class HeaderPage extends React.Component {
             </div>
             <div className={userClass}
                 onClick={this.onClick} >
-                <div className="avatar no-flex">
-                    <img src={this.props.user.get("avatar")} />
-                </div>
-                <div className="person">
-                    <div className="name">{this.props.user.get("name")}</div>
-                    <div>{this.props.user.get("email")}</div>
-                    <div>@{this.props.user.get("username")}</div>
-                </div>
+                <Avatar user={this.props.user} />
                 <div className="caret no-flex">
                     <i className="fa fa-caret-down"/>
                 </div>
                 {this.state.isMenuOpen ?
                     <div className="user-menu">
+                        <div onClick={this.onDashboardClick}>Dashboard</div>
                         <div onClick={this.onLogout}>Logout</div>
                     </div> :
                     undefined}
@@ -56,6 +57,11 @@ export default class HeaderPage extends React.Component {
         document.removeEventListener("click", this.onDocumentClick, false);
         this.setState({
             isMenuOpen: false
+        });
+    }
+    onDashboardClick() {
+        this.context.router.push({
+            pathname: "/dashboard"
         });
     }
     onLogout() {

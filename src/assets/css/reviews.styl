@@ -1,0 +1,42 @@
+.reviews
+    width 800px
+    margin 50px auto
+    & > button
+        margin 10px 0
+    .sort
+        font-size 12pt
+        margin 20px 0
+        float right
+    .review
+        margin 10px 0
+        clear both
+        for x in 0..10
+            .rating-{x}
+                border-left 8px solid rgba(0, 101, 252, x/10)
+
+        h1, h3, h5, p
+            margin 10px 0
+        h5
+            color #aaa
+        p
+            color #888
+            line-height 1.3em
+        .rating
+            width 130px
+            padding-left 10px
+            h1
+                color $tint-blue
+
+    .new-review
+        text-align center
+        label
+            flex none
+            width 150px
+            text-align right
+        input
+            margin 5px 10px
+        .new-rating input
+            flex none
+            font-size 20pt
+            line-height 1.2em
+            width 70px

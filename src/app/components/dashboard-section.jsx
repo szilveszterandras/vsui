@@ -6,19 +6,20 @@ export default class DashboardSection extends React.Component {
     constructor() {
         super();
         this.state = {
-            sortValue: PhotoSorter.SORT.NEWEST
+            sortCriteria: PhotoSorter.SORT.AGE,
+            sortDirection: 1
         };
-        this._generateSorters();
         this.onSortChange = this.onSortChange.bind(this);
+        this.doSort = this.doSort.bind(this);
     }
     render() {
         const photos = this.props.photos
-            .sort(this.sorters[this.state.sortValue])
+            .sort(this.doSort)
             .take(this.props.maxCount || Infinity);
         return <div className="dashboard-section">
             <h2>{this.props.title}
                 <PhotoSorter onChange={this.onSortChange}
-                    value={this.state.sortValue}/>
+                    criteria={this.state.sortCriteria} direction={this.state.sortDirection}/>
             </h2>
             <VerticalGallery
                 photos={photos}
@@ -31,29 +32,27 @@ export default class DashboardSection extends React.Component {
                 undefined}
         </div>;
     }
-    onSortChange(sortValue) {
+    onSortChange(sortCriteria, sortDirection) {
         this.setState({
-            sortValue
+            sortCriteria,
+            sortDirection
         });
     }
-    _generateSorters() {
-        this.sorters = {};
-        this.sorters[PhotoSorter.SORT.NEWEST] = (a, b) =>
-            b.get("uploadedAt") - a.get("uploadedAt");
-        this.sorters[PhotoSorter.SORT.OLDEST] = (a, b) =>
-            a.get("uploadedAt") - b.get("uploadedAt");
-
-        this.sorters[PhotoSorter.SORT.HIGHEST_RATED] = (a, b) => {
-            return 0;
-        };
-        this.sorters[PhotoSorter.SORT.LOWEST_RATED] = (a, b) => {
-            return 0;
-        };
-        this.sorters[PhotoSorter.SORT.MOST_REVIEWS] = (a, b) => {
-            return 0;
-        };
-        this.sorters[PhotoSorter.SORT.FEWEST_REVIEWS] = (a, b) => {
-            return 0;
-        };
+    doSort(a, b) {
+        let ret;
+        switch (this.state.sortCriteria) {
+        case PhotoSorter.SORT.AGE:
+            ret = a.get("uploadedAt") - b.get("uploadedAt");
+            break;
+        case PhotoSorter.SORT.RATING:
+            ret = a.get("rating") - b.get("rating");
+            break;
+        case PhotoSorter.SORT.NUMREV:
+            ret = a.get("reviewCount") - b.get("reviewCount");
+            break;
+        default:
+            ret = 0;
+        }
+        return ret * this.state.sortDirection;
     }
 }

@@ -12,15 +12,15 @@ export default class VerticalGallery extends React.Component {
             columns[i % this.props.columns].push(photo);
         });
         return (<div className="vertical-gallery flex">
-            {columns.map(column =>
-                this.renderColumn(column))}
+            {columns.map((column, key) =>
+                this.renderColumn(column, key))}
             </div>);
     }
-    renderColumn(column) {
-        return (<div className="column">
+    renderColumn(column, key) {
+        return (<div key={key} className="column">
             {column.map(photo =>
                 <PhotoThumb key={photo.get("id")} photo={photo}
-                    isStarrable={photo.get("username") !== Session.user.get("username")}
+                    isMine={photo.get("user").get("username") === Session.user.get("username")}
                     isStarred={this.props.stars.includes(photo.get("hash"))}
                 />)}
         </div>);

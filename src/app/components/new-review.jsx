@@ -8,15 +8,21 @@ export default class NewReview extends React.Component {
     }
     render() {
         return <div className="new-review">
-            <label>Summary: </label>
-            <input type="text" ref="summary" />
-            <br/>
-            <label>Details: </label>
-            <input type="text" ref="details" />
-            <br/>
-            <label>Score: </label>
-            <input type="number" ref="score" />
+            <div className="flex align-items-center new-rating">
+                <label>Score: </label>
+                <input type="number" min="0" max="100" step="1" ref="score" />
+            </div>
+            <div className="flex align-items-center">
+                <label>Summary: </label>
+                <input type="text" ref="summary" />
+            </div>
+            <div className="flex align-items-center">
+                <label>Details: </label>
+                <input type="text" ref="details" />
+            </div>
+
             <button onClick={this.onAddReview}>Submit Review</button>
+            <button onClick={this.props.onClose}>Cancel</button>
         </div>;
     }
     onAddReview() {
@@ -25,6 +31,6 @@ export default class NewReview extends React.Component {
             title: this.refs.summary.value,
             description: this.refs.details.value,
             rating: this.refs.score.value
-        });
+        }, this.props.onClose);
     }
 }

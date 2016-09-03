@@ -4,6 +4,7 @@
     .photo-thumb
         animation fadein 500ms
         display inline-block
+        position relative
         margin 5px
         width 250px
         cursor pointer
@@ -14,15 +15,29 @@
             img
                 width 250px
 
+        .star
+            position absolute
+            top 5px
+            right 5px
+            color #fff
+
         &:hover .image
             opacity 1
 
         .title
-            padding 10px
-            padding-bottom 20px
+            padding 5px 10px
             background-color #000
             color #fff
             margin-top -1px
+            h4, h5, p
+                margin 5px 0
+                font-weight normal
+            h5
+                color #bbb
+                &:hover
+                    color #fff
+            p
+                text-align right
 
 @keyframes fadein {
     from { opacity: 0; }

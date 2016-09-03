@@ -15,9 +15,10 @@ export default class PhotoThumb extends React.Component {
         this.onLoad = this.onLoad.bind(this);
         this.onClick = this.onClick.bind(this);
         this.onStarClick = this.onStarClick.bind(this);
+        this.onUsernameClick = this.onUsernameClick.bind(this);
     }
     render() {
-        const starIcon = this.props.isStarrable ?
+        const starIcon = !this.props.isMine ?
             <i className={"star fa " + (this.props.isStarred ?
                 "fa-star active" : "fa-star-o")}
                 onClick={this.onStarClick} /> :
@@ -25,6 +26,7 @@ export default class PhotoThumb extends React.Component {
         const style = {
             display: this.state.loaded ? "block" : "none"
         };
+        const rating = this.props.photo.get("rating") !== -1 ? <p>{this.props.photo.get("rating")}%</p> : undefined;
         return (<div className="photo-thumb" style={style}
             onClick={this.onClick}>
             <div className="image">
@@ -32,7 +34,13 @@ export default class PhotoThumb extends React.Component {
                     onLoad={this.onLoad} />
             </div>
             {starIcon}
-            <div className="title">{this.props.photo.get("title")}</div>
+            <div className="title flex align-items-center">
+                <div>
+                    <h4>{this.props.photo.get("title")}</h4>
+                    <h5 onClick={this.onUsernameClick}>@{this.props.photo.get("user").get("username")}</h5>
+                </div>
+                {rating}
+            </div>
         </div>);
     }
     onLoad() {
@@ -42,13 +50,20 @@ export default class PhotoThumb extends React.Component {
     }
     onClick() {
         this.context.router.push({
-            pathname: "/" + this.props.photo.get("username") +
+            pathname: "/" + this.props.photo.get("user").get("username") +
                 "/photo/" + this.props.photo.get("hash")
         });
     }
-    onStarClick() {
+    onStarClick(e) {
+        e.stopPropagation();
         Session.request(this.props.isStarred ? "star/delete" : "star/new", {
             hash: this.props.photo.get("hash")
+        });
+    }
+    onUsernameClick(e) {
+        e.stopPropagation();
+        this.context.router.push({
+            pathname: "/" + this.props.photo.get("user").get("username")
         });
     }
 }
