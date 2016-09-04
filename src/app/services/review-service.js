@@ -15,7 +15,11 @@ export default class ReviewService {
         this.subscription = this.stream
             .scan((state, update) => {
                 if (update.has("isDeleted")) {
-                    return state.delete(update.get("id"));
+                    let newState = state;
+                    update.get("ids").forEach(id => {
+                        newState = newState.delete(id);
+                    });
+                    return newState;
                 }
                 const m = update.reduce((map, x) =>
                     map.set(x.get("id"), x), Immutable.Map());

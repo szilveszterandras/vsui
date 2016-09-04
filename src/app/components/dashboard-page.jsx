@@ -17,6 +17,8 @@ export default class DashboardPage extends React.Component {
         this.state = {
             photos: Immutable.Map(),
             stars: Immutable.List(),
+            starredPhotos: Immutable.Map(),
+            newPhotos: Immutable.Map(),
             waiting: true,
             isUploadOpen: false
         };
@@ -44,6 +46,24 @@ export default class DashboardPage extends React.Component {
         }, () => this.setState({
             waiting: false
         }));
+        this.starredPhotosService = new PhotosService("photos/stream/starred", {
+            username: Session.user.get("username")
+        }, starredPhotos => {
+            this.setState({
+                starredPhotos
+            });
+        }, () => this.setState({
+            waiting: false
+        }));
+        this.newPhotosService = new PhotosService("photos/stream/new", {
+            username: Session.user.get("username")
+        }, newPhotos => {
+            this.setState({
+                newPhotos
+            });
+        }, () => this.setState({
+            waiting: false
+        }));
     }
     render() {
         return (<div className="dashboard">
@@ -63,6 +83,27 @@ export default class DashboardPage extends React.Component {
                 photos={this.state.photos.toList()}
                 stars={this.state.stars}
                 onMore={this.onMyPhotos}/>
+            <DashboardSection
+                title="Starred by me"
+                maxCount={8}
+                photos={this.state.starredPhotos.toList()}
+                stars={this.state.stars}
+                onMore={this.onMyStarredPhotos}/>
+            <DashboardSection
+                title="New"
+                maxCount={8}
+                photos={this.state.newPhotos.toList().sort((a, b) =>
+                    b.get("uploadedAt") - a.get("uploadedAt"))}
+                stars={this.state.stars}
+                onMore={this.onMyStarredPhotos}
+                sortable={false} />
+            <DashboardSection
+                title="Trending"
+                maxCount={8}
+                photos={this.state.newPhotos.toList().sort((a, b) => b.get("reviewCount") - a.get("reviewCount"))}
+                stars={this.state.stars}
+                onMore={this.onMyStarredPhotos}
+                sortable={false} />
         </div>);
     }
     componentWillUnmount() {
@@ -71,6 +112,8 @@ export default class DashboardPage extends React.Component {
         }
         this.photosService.destroy();
         this.starService.destroy();
+        this.starredPhotosService.destroy();
+        this.newPhotosService.destroy();
     }
     toggleUpload(isUploadOpen) {
         this.setState({

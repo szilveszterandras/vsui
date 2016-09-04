@@ -15,8 +15,9 @@ export default class TagService {
         });
 
         this.subscription = this.stream.scan((state, update) => {
-            const m = update.reduce((map, x) =>
-                map.set(x.get("tag"), x.get("count")), Immutable.Map());
+            const m = update.reduce((map, x) => {
+                return map.set(x.get("tag"), x.get("count"));
+            }, Immutable.Map());
             return state.merge(m);
         }, Immutable.Map()).subscribe(this.subject);
         this.stream.take(1).subscribe(onComplete);

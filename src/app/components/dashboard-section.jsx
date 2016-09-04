@@ -13,13 +13,17 @@ export default class DashboardSection extends React.Component {
         this.doSort = this.doSort.bind(this);
     }
     render() {
-        const photos = this.props.photos
-            .sort(this.doSort)
-            .take(this.props.maxCount || Infinity);
+        let photos = this.props.photos;
+        if (this.props.sortable !== false) {
+            photos = photos.sort(this.doSort);
+        }
+        photos = photos.take(this.props.maxCount || Infinity);
+        const sorter = this.props.sortable === false ? undefined :
+            <PhotoSorter onChange={this.onSortChange}
+                criteria={this.state.sortCriteria} direction={this.state.sortDirection}/>;
         return <div className="dashboard-section">
             <h2>{this.props.title}
-                <PhotoSorter onChange={this.onSortChange}
-                    criteria={this.state.sortCriteria} direction={this.state.sortDirection}/>
+                {sorter}
             </h2>
             <VerticalGallery
                 photos={photos}

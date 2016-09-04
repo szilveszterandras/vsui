@@ -38,10 +38,6 @@ export default class Reviews extends React.Component {
         this.reviewService.destroy();
     }
     render() {
-        if (this.state.reviews.count() === 0) {
-            return null;
-        }
-        const sort = this.renderSort();
         let newReview;
         if (!this.props.isMine) {
             newReview = this.state.isNewReviewOpen ?
@@ -52,7 +48,12 @@ export default class Reviews extends React.Component {
                     isNewReviewOpen: true
                 })}><i className="fa fa-pencil" /> Write Review</button>;
         }
-
+        if (this.state.reviews.count() === 0) {
+            return <div className="reviews">
+                {newReview}
+            </div>;
+        }
+        const sort = this.renderSort();
         const reviews = this.state.reviews.toList()
             .sort((a, b) => {
                 let ret;
