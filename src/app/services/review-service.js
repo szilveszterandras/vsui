@@ -4,7 +4,6 @@ import Session from "utils/session";
 
 export default class ReviewService {
     constructor(data, onUpdate, onComplete) {
-        console.log(" > Review stream starting");
         const d = Session.stream("reviews/stream", data);
         this.stream = d.stream;
         this.requestId = d.requestId;
@@ -12,7 +11,7 @@ export default class ReviewService {
         this.subject = new Rx.BehaviorSubject(Immutable.Map());
         this.subject.subscribe(onUpdate);
 
-        this.subscription = this.stream
+        this.stream
             .scan((state, update) => {
                 if (update.has("isDeleted")) {
                     let newState = state;
@@ -26,11 +25,11 @@ export default class ReviewService {
                 return state.merge(m);
             }, Immutable.Map()).subscribe(this.subject);
         this.stream.take(1).subscribe(onComplete);
+        logger.info("Review service started");
     }
     destroy() {
-        Session.cancel(this.requestId, () => {
-            this.subscription.unsubscribe();
-            this.subject.unsubscribe();
-        });
+        Session.cancel(this.requestId);
+        this.subject.unsubscribe();
+        logger.info("Review service stopped");
     }
 }

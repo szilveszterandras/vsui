@@ -73,11 +73,11 @@ export default class SearchComponent extends React.Component {
             const items = this.state.results.map(r => {
                 switch (this.state.type) {
                 case TYPES.USER:
-                    return <UserResult result={r} onClick={this.onItemClick.bind(this, r, TYPES.USER)} />;
+                    return <UserResult key={r.get("id")} result={r} onClick={this.onItemClick.bind(this, r, TYPES.USER)} />;
                 case TYPES.TAG:
-                    return <TagResult result={r} onClick={this.onItemClick.bind(this, r, TYPES.TAG)} />;
+                    return <TagResult key={r.get("tag")} result={r} onClick={this.onItemClick.bind(this, r, TYPES.TAG)} />;
                 case TYPES.PHOTO:
-                    return <PhotoResult result={r} onClick={this.onItemClick.bind(this, r, TYPES.PHOTO)} />;
+                    return <PhotoResult key={r.get("id")} result={r} onClick={this.onItemClick.bind(this, r, TYPES.PHOTO)} />;
                 }
             });
             results = (<div className={(this.state.type === TYPES.TAG ? "tags " : "") + "results"}>
@@ -143,7 +143,7 @@ export default class SearchComponent extends React.Component {
             break;
         case TYPES.PHOTO:
             this.context.router.push({
-                pathname: "/" + data.get("username") + "/photo/" + data.get("hash")
+                pathname: "/" + data.get("user").get("username") + "/photo/" + data.get("hash")
             });
             break;
         }

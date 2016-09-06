@@ -13,11 +13,26 @@ export default class UserRoot extends React.Component {
         };
     }
     componentWillMount() {
+        this.bindServices(this.props.params.username);
+    }
+    componentWillReceiveProps(props) {
+        if (props.params.username !== this.props.params.username) {
+            this.unbindServices();
+            this.bindServices(props.params.username);
+        }
+    }
+    render() {
+        return React.cloneElement(this.props.children, {
+            photos: this.state.photos,
+            stars: this.state.stars
+        });
+    }
+    bindServices(username) {
         if (!Session.user) {
             return;
         }
         this.service = new PhotosService("photos/stream", {
-            username: this.props.params.username
+            username
         }, photos => {
             this.setState({
                 photos
@@ -36,17 +51,14 @@ export default class UserRoot extends React.Component {
             waiting: false
         }));
     }
-    render() {
-        return React.cloneElement(this.props.children, {
-            photos: this.state.photos,
-            stars: this.state.stars
-        });
-    }
-    componentWillUnmount() {
+    unbindServices() {
         if (!Session.user) {
             return;
         }
         this.service.destroy();
         this.starService.destroy();
+    }
+    componentWillUnmount() {
+        this.unbindServices();
     }
 }

@@ -34,6 +34,18 @@ export default class Reviews extends React.Component {
             });
         });
     }
+    componentWillReceiveProps(props) {
+        if (props.hash !== this.props.hash) {
+            this.reviewService.destroy();
+            this.reviewService = new ReviewService({
+                hash: props.hash
+            }, reviews => {
+                this.setState({
+                    reviews
+                });
+            });
+        }
+    }
     componentWillUnmount() {
         this.reviewService.destroy();
     }
@@ -98,7 +110,7 @@ export default class Reviews extends React.Component {
             const icon = isActive ?
                 <i className={(this.state.sortDirection > 0 ? "fa-arrow-up" : "fa-arrow-down") + " fa"} /> :
                 undefined;
-            return <span className={isActive ? "active" : ""} onClick={() => this.onSortClick(sort)}>
+            return <span key={sort} className={isActive ? "active" : ""} onClick={() => this.onSortClick(sort)}>
                 {SORT_CAPTIONS[sort]} {icon}</span>;
         });
         return <div className="sort">

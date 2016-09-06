@@ -15,10 +15,11 @@ export default class DashboardPage extends React.Component {
     constructor() {
         super();
         this.state = {
-            photos: Immutable.Map(),
+            photos: Immutable.List(),
             stars: Immutable.List(),
-            starredPhotos: Immutable.Map(),
-            newPhotos: Immutable.Map(),
+            starredPhotos: Immutable.List(),
+            newPhotos: Immutable.List(),
+            trendingPhotos: Immutable.List(),
             waiting: true,
             isUploadOpen: false
         };
@@ -32,7 +33,7 @@ export default class DashboardPage extends React.Component {
             username: Session.user.get("username")
         }, photos => {
             this.setState({
-                photos
+                photos: photos.toList()
             });
         }, () => this.setState({
             waiting: false
@@ -50,7 +51,7 @@ export default class DashboardPage extends React.Component {
             username: Session.user.get("username")
         }, starredPhotos => {
             this.setState({
-                starredPhotos
+                starredPhotos: starredPhotos.toList()
             });
         }, () => this.setState({
             waiting: false
@@ -58,8 +59,12 @@ export default class DashboardPage extends React.Component {
         this.newPhotosService = new PhotosService("photos/stream/new", {
             username: Session.user.get("username")
         }, newPhotos => {
+            const list = newPhotos.toList();
             this.setState({
-                newPhotos
+                newPhotos: list.sort((a, b) =>
+                    b.get("uploadedAt") - a.get("uploadedAt")),
+                trendingPhotos: list.sort((a, b) =>
+                    b.get("reviewCount") - a.get("reviewCount"))
             });
         }, () => this.setState({
             waiting: false
@@ -76,33 +81,25 @@ export default class DashboardPage extends React.Component {
                     </button>
                 </div>)}
 
-
             <DashboardSection
                 title="My Photos"
                 maxCount={8}
-                photos={this.state.photos.toList()}
+                photos={this.state.photos}
                 stars={this.state.stars}
                 onMore={this.onMyPhotos}/>
             <DashboardSection
                 title="Starred by me"
-                maxCount={8}
-                photos={this.state.starredPhotos.toList()}
-                stars={this.state.stars}
-                onMore={this.onMyStarredPhotos}/>
+                photos={this.state.starredPhotos}
+                stars={this.state.stars}/>
             <DashboardSection
                 title="New"
-                maxCount={8}
-                photos={this.state.newPhotos.toList().sort((a, b) =>
-                    b.get("uploadedAt") - a.get("uploadedAt"))}
+                photos={this.state.newPhotos}
                 stars={this.state.stars}
-                onMore={this.onMyStarredPhotos}
                 sortable={false} />
             <DashboardSection
                 title="Trending"
-                maxCount={8}
-                photos={this.state.newPhotos.toList().sort((a, b) => b.get("reviewCount") - a.get("reviewCount"))}
+                photos={this.state.trendingPhotos}
                 stars={this.state.stars}
-                onMore={this.onMyStarredPhotos}
                 sortable={false} />
         </div>);
     }

@@ -38,20 +38,20 @@ export default class PhotoPage extends React.Component {
         let actions = [];
         if (this.state.isMine && !this.state.isEditOpen) {
             actions = actions.concat([
-                <i className="fa fa-pencil-square-o" onClick={this.onEditClick} />,
-                <i className="fa fa-times" onClick={this.onDeleteClick} />]);
+                <i key="edit" className="fa fa-pencil-square-o" onClick={this.onEditClick} />,
+                <i key="delete" className="fa fa-times" onClick={this.onDeleteClick} />]);
         }
         if (!this.state.isMine) {
-            actions.push(<i className={"star fa " + (this.state.isStarred ?
+            actions.push(<i key="star" className={"star fa " + (this.state.isStarred ?
                 "fa-star active" : "fa-star-o")}
                 onClick={this.onStarClick} />);
         }
         if (this.state.isFullscreen) {
-            actions.push(<i className="fa fa-compress" onClick={() => this.setState({
+            actions.push(<i key="minimize" className="fa fa-compress" onClick={() => this.setState({
                 isFullscreen: false
             })} />);
         } else {
-            actions.push(<i className="fa fa-expand" onClick={() => this.setState({
+            actions.push(<i key="maximize" className="fa fa-expand" onClick={() => this.setState({
                 isFullscreen: true
             })} />);
         }

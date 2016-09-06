@@ -21,7 +21,7 @@ export default class PhotoSorter extends React.Component {
             const icon = isActive ?
                 <i className={(this.props.direction > 0 ? "fa-arrow-up" : "fa-arrow-down") + " fa"} /> :
                 undefined;
-            return <span className={isActive ? "active" : ""} onClick={() => this.onSortClick(sort)}>
+            return <span key={sort} className={isActive ? "active" : ""} onClick={() => this.onSortClick(sort)}>
                 {SORT_CAPTIONS[sort]} {icon}</span>;
         });
         return <div className="sort">

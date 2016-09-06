@@ -4,17 +4,14 @@ import Session from "utils/session";
 
 export default class StarService {
     constructor(data, onUpdate, onComplete) {
-        console.log(" > Star stream starting");
         const d = Session.stream("stars/stream", data);
         this.stream = d.stream;
         this.requestId = d.requestId;
 
         this.subject = new Rx.BehaviorSubject(Immutable.List());
-        this.subject.subscribe(onUpdate, undefined, () => {
-            logger.info(" > Star stream complete");
-        });
+        this.subject.subscribe(onUpdate);
 
-        this.subscription = this.stream
+        this.stream
             .scan((state, update) =>
                 update.get("operation") === "add" ?
                     state.concat(update.get("stars")) :
@@ -22,11 +19,11 @@ export default class StarService {
             , Immutable.List())
             .subscribe(this.subject);
         this.stream.take(1).subscribe(onComplete);
+        logger.info("Star service started");
     }
     destroy() {
-        Session.cancel(this.requestId, () => {
-            this.subscription.unsubscribe();
-            this.subject.unsubscribe();
-        });
+        Session.cancel(this.requestId);
+        this.subject.unsubscribe();
+        logger.info("Star service stopped");
     }
 }

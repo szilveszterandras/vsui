@@ -1,8 +1,9 @@
 import React from "react";
+import PureComponent from "utils/pure-component";
 import VerticalGallery from "components/vertical-gallery";
 import PhotoSorter from "components/photo-sorter";
 
-export default class DashboardSection extends React.Component {
+export default class DashboardSection extends PureComponent {
     constructor() {
         super();
         this.state = {

@@ -26,7 +26,7 @@ export default class TagEditor extends React.Component {
     render() {
         return <div className="tag-editor">
             {this.props.tags.map(t =>
-                <span className="tag">#{t}</span>)}
+                <span key={t} className="tag">#{t}</span>)}
             <input type="text" ref="tagInput" />
             {this.state.prevValue[0] === "#" ? this.renderSuggestions() : undefined}
         </div>;
@@ -42,9 +42,10 @@ export default class TagEditor extends React.Component {
             .sort((a, b) => {
                 return b - a;
             })
-            .take(5);
-        return <div className="suggestions">{matches.map((nr, tag) =>
-                <span onClick={this.onSuggestionClick.bind(this, tag)}>{tag}({nr})</span>
+            .take(5)
+            .entrySeq();
+        return <div className="suggestions">{matches.map(tag =>
+                <span key={tag[0]} onClick={this.onSuggestionClick.bind(this, tag[0])}>{tag[0]}({tag[1]})</span>
         )}</div>;
     }
     onSuggestionClick(tag) {

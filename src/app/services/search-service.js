@@ -8,12 +8,12 @@ export default class SearchService {
         this.subject.subscribe(onUpdate);
     }
     init(topic, data) {
-        console.log(" > Search stream starting");
         const d = Session.stream("search/" + topic, data);
         this.stream = d.stream;
         this.requestId = d.requestId;
 
         this.subscription = this.stream.subscribe(this.subject);
+        logger.info("Search service started");
     }
     search(topic, data) {
         this.reset(() => {
@@ -34,6 +34,7 @@ export default class SearchService {
         this.reset(() => {
             if (this.subject) {
                 this.subject.unsubscribe();
+                logger.info("Search service stopped");
             }
         });
     }
